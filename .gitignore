@@ -48,6 +48,9 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+### clangd ###
+.cache/ 
+
 ### CMake Patch ###
 CMakeUserPresets.json
 
@@ -58,5 +61,6 @@ CMakeUserPresets.json
 build/
 
 .vscode/
+.cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake,c++

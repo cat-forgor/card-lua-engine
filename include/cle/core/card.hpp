@@ -4,12 +4,14 @@
 #include <format>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <cle/core/enums.hpp>
 #include <cle/mechanics/mana_cost.hpp>
+#include <sol/sol.hpp>
 
-namespace CLE {
+namespace cle::core {
 // creatures have power and toughness
 struct CreatureStats {
     int power{0};
@@ -63,7 +65,7 @@ public:
     [[nodiscard]] auto instance_id() const -> uint64_t { return instance_id_; }
     [[nodiscard]] auto name() const -> const std::string & { return name_; }
     [[nodiscard]] auto type() const -> CardType { return type_; }
-    [[nodiscard]] auto mana_cost() const -> const ManaCost & { return mana_cost_; }
+    [[nodiscard]] auto mana_cost() const -> const cle::mechanics::ManaCost & { return mana_cost_; }
     [[nodiscard]] auto colors() const -> Color { return colors_; }
     [[nodiscard]] auto oracle_text() const -> const std::string & { return oracle_text_; }
     [[nodiscard]] auto flavor_text() const -> const std::string & { return flavor_text_; }
@@ -72,15 +74,28 @@ public:
     [[nodiscard]] auto creature_stats() const -> std::optional<CreatureStats> {
         return creature_stats_;
     }
+    [[nodiscard]] auto triggers() const -> const std::unordered_map<TriggerType, sol::function> & {
+        return triggers_;
+    }
+    [[nodiscard]] auto get_trigger(TriggerType type) const -> std::optional<sol::function> {
+        auto it = triggers_.find(type);
+        if (it != triggers_.end()) {
+            return it->second;
+        }
+        return std::nullopt;
+    }
 
     // setters
-    void set_mana_cost(ManaCost cost) { mana_cost_ = cost; }
+    void set_mana_cost(cle::mechanics::ManaCost cost) { mana_cost_ = cost; }
     void set_colors(Color colors) { colors_ = colors; }
     void set_oracle_text(std::string text) { oracle_text_ = std::move(text); }
     void set_flavor_text(std::string text) { flavor_text_ = std::move(text); }
     void add_subtype(std::string subtype) { subtypes_.push_back(std::move(subtype)); }
     void add_keyword(std::string keyword) { keywords_.push_back(std::move(keyword)); }
     void set_creature_stats(CreatureStats stats) { creature_stats_ = stats; }
+    void set_triggers(std::unordered_map<TriggerType, sol::function> triggers) {
+        triggers_ = std::move(triggers);
+    }
 
 private:
     /*
@@ -91,7 +106,7 @@ private:
 
     std::string name_;
     CardType type_;
-    ManaCost mana_cost_;
+    cle::mechanics::ManaCost mana_cost_;
     Color colors_;
     std::string oracle_text_;
     std::string flavor_text_;
@@ -101,5 +116,6 @@ private:
         creature_stats_;    // optional since not all cards are creatures obviously
     uint64_t instance_id_;  // to prevent same cards but different instance being
                             // registered as the same
+    std::unordered_map<TriggerType, sol::function> triggers_;
 };
-};  // namespace CLE
+};  // namespace cle::core
