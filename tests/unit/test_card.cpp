@@ -1,6 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
 #include <cle/core/card.hpp>
-#include <cle/core/enums.hpp>
 
 using namespace cle::core;
 
@@ -31,7 +30,7 @@ TEST_CASE("Card copy creates new instance ID", "[card]") {
 TEST_CASE("Card setters and getters", "[card]") {
     Card card("Llanowar Elves", CardType::Creature);
 
-    card.set_oracle_text("Meow.");
+    card.set_oracle_text("Meow");
     card.set_flavor_text("Rawr");
     card.set_colors(Color::Green);
     card.add_subtype("Elf");

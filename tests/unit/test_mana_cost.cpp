@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
-#include <cle/mechanics/mana_cost.hpp>
+#include <cle/mana/mana_cost.hpp>
 
-using namespace cle::mechanics;
+using namespace cle::mana;
 
 TEST_CASE("ManaCost parsing -  colorless", "[mana]") {
     auto result = ManaCost::from_string("{3}");
