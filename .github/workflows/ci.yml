@@ -32,13 +32,10 @@ jobs:
             pkg-config
 
       - name: configure debug
-        run: cmake --preset debug
+        run: cmake --preset debug -DCLE_BUILD_TESTS=ON
 
       - name: build debug
         run: cmake --build --preset debug
-
-      - name: run tests
-        run: ctest --test-dir build/debug --output-on-failure --no-tests=error
 
       - name: run test bins
         run: |

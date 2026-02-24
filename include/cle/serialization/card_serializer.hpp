@@ -8,7 +8,7 @@
 #include <cle/core/card_type.hpp>
 #include <cle/core/color.hpp>
 #include <cle/lua/engine.hpp>
-#include <cle/proto/card.pb.h>
+#include <cle/card.pb.h>
 
 namespace cle::serialization {
 

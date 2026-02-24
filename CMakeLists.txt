@@ -11,7 +11,7 @@ project(CardLuaEngine
 )
 
 # opts
-option(CLE_BUILD_TESTS ${PROJECT_IS_TOP_LEVEL})
+option(CLE_BUILD_TESTS "build tests" ${PROJECT_IS_TOP_LEVEL})
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -35,23 +35,23 @@ target_link_libraries(cle
     Lua::Lua
 )
 
-option(CLE_BUILD_PROTO ON)
+option(CLE_BUILD_PROTO "build protobuf ser" ON)
 
 if(CLE_BUILD_PROTO)
     include(IncludeProtobuf)
 
     set(CLE_PROTO_GEN_DIR "${CMAKE_CURRENT_BINARY_DIR}/proto_gen")
-    set(CLE_PROTO_SRC "${CLE_PROTO_GEN_DIR}/cle/proto/card.pb.cc")
-    set(CLE_PROTO_HDR "${CLE_PROTO_GEN_DIR}/cle/proto/card.pb.h")
+    set(CLE_PROTO_SRC "${CLE_PROTO_GEN_DIR}/cle/card.pb.cc")
+    set(CLE_PROTO_HDR "${CLE_PROTO_GEN_DIR}/cle/card.pb.h")
 
     add_custom_command(
         OUTPUT "${CLE_PROTO_SRC}" "${CLE_PROTO_HDR}"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${CLE_PROTO_GEN_DIR}/cle/proto"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CLE_PROTO_GEN_DIR}/cle"
         COMMAND protobuf::protoc
             --cpp_out="${CLE_PROTO_GEN_DIR}"
             -I "${CMAKE_CURRENT_SOURCE_DIR}/proto"
-            "${CMAKE_CURRENT_SOURCE_DIR}/proto/cle/proto/card.proto"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/proto/cle/proto/card.proto" protobuf::protoc
+            "${CMAKE_CURRENT_SOURCE_DIR}/proto/cle/card.proto"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/proto/cle/card.proto" protobuf::protoc
     )
 
     add_library(cle_proto STATIC "${CLE_PROTO_SRC}")
